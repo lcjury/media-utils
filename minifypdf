@@ -1,0 +1,21 @@
+#!/bin/sh
+
+usage() { echo "Usage: $1 infile outfile" 1>&2; exit 1; }
+
+minifypdf () {
+  gs -q -dSAFER \
+    -sDEVICE=pdfwrite -dPDFSETTINGS=/screen \
+    -dEmbedAllFonts=true -dSubsetFonts=true \
+    -dAutoRotatePages=/None \
+    -dGrayImageDownsampleType=/Bicubic  -dGrayImageResolution=$3 \
+    -dMonoImageDownsampleType=/Bicubic  -dMonoImageResolution=$3 \
+    -dColorImageDownsampleType=/Bicubic -dColorImageResolution=$3 \
+    -o "$2" "$1"
+}
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+  usage "$0"
+  exit 1
+fi
+
+minifypdf "$1" "$2" "72" || exit $?
